@@ -1,0 +1,1707 @@
+{
+	"info": {
+		"_postman_id": "10f25dc4-bddd-4858-b997-fba740bea492",
+		"name": "restful-booker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42440748",
+		"_collection_link": "https://gold-spaceship-799709.postman.co/workspace/Projeto-final---Teste-de-API~290b31c2-d0a6-4be9-be30-0b7b306e2e6e/collection/42440748-10f25dc4-bddd-4858-b997-fba740bea492?action=share&source=collection_link&creator=42440748"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Criar token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 200', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+									"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+									"\r",
+									"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+									"pm.test('Teste de contrato', function () {\r",
+									"\r",
+									"    // Verificação dos campos presentes no JSON de resposta\r",
+									"    pm.expect(jsonData).to.have.property('token')\r",
+									"\r",
+									"    // Verificação do tipo dos campos\r",
+									"    pm.expect(jsonData.token).to.be.a('string')\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth"
+							]
+						},
+						"description": "## Request body\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| username | String | Username for authentication<br><br>Valor padrão: `admin` |\n| password | String | Password for authentication<br><br>Valor padrão: `password123` |"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "Criar reserva",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 200', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+									"pm.collectionVariables.set(\"id\", jsonData.bookingid);\r",
+									"pm.collectionVariables.set(\"firstname\", jsonData.booking.firstname);\r",
+									"pm.collectionVariables.set(\"lastname\", jsonData.booking.lastname);\r",
+									"pm.collectionVariables.set(\"totalprice\", jsonData.booking.totalprice);\r",
+									"pm.collectionVariables.set(\"depositpaid\", jsonData.booking.depositpaid);\r",
+									"pm.collectionVariables.set(\"checkin\", jsonData.booking.bookingdates.checkin);\r",
+									"pm.collectionVariables.set(\"checkout\", jsonData.booking.bookingdates.checkout);\r",
+									"pm.collectionVariables.set(\"additionalneeds\", jsonData.booking.additionalneeds);\r",
+									"\r",
+									"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+									"pm.test('Teste de contrato', function () {\r",
+									"\r",
+									"    // Verificação dos campos presentes no JSON de resposta\r",
+									"    pm.expect(jsonData).to.have.property('bookingid');\r",
+									"    pm.expect(jsonData.booking).to.have.property('firstname')\r",
+									"    pm.expect(jsonData.booking).to.have.property('lastname')\r",
+									"    pm.expect(jsonData.booking).to.have.property('totalprice')\r",
+									"    pm.expect(jsonData.booking).to.have.property('depositpaid')\r",
+									"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkin')\r",
+									"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkout')\r",
+									"    pm.expect(jsonData.booking).to.have.property('additionalneeds')\r",
+									"\r",
+									"    // Verificação do tipo dos campos\r",
+									"    pm.expect(jsonData.bookingid).to.be.a('number')\r",
+									"    pm.expect(jsonData.booking.firstname).to.be.a('string')\r",
+									"    pm.expect(jsonData.booking.lastname).to.be.a('string')\r",
+									"    pm.expect(jsonData.booking.totalprice).to.be.a('number')\r",
+									"    pm.expect(jsonData.booking.depositpaid).to.be.a('boolean')\r",
+									"    pm.expect(jsonData.booking.bookingdates.checkin).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.booking.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.booking.bookingdates.checkout).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.booking.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.booking.additionalneeds).to.be.a('string')\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"David\",\r\n    \"lastname\": \"Medeiros\",\r\n    \"totalprice\": 999,\r\n    \"depositpaid\": true,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-06-12\",\r\n        \"checkout\": \"2025-06-15\"\r\n    },\r\n    \"additionalneeds\": \"Café da manhã\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							]
+						},
+						"description": "## Request body\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| firstname | String | Firstname for the guest who made the booking |\n| lastname | String | Lastname for the guest who made the booking |\n| totalprice | Number | The total price for the booking |\n| depositpaid | Boolean | Whether the deposit has been paid or not |\n| checkin | Date | Date the guest is checking in |\n| checkout | Date | Date the guest is checking out |\n| additionalneeds | String | Any other needs the guest has |"
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar reserva por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 200', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"// Obtenção dos dados do cadastro a partir das variáveis de coleção. Esses dados são usados para comparação posterior.\r",
+									"const firstname = pm.collectionVariables.get('firstname')\r",
+									"const lastname = pm.collectionVariables.get('lastname')\r",
+									"const totalprice = pm.collectionVariables.get('totalprice')\r",
+									"const depositpaid = pm.collectionVariables.get('depositpaid')\r",
+									"const checkin = pm.collectionVariables.get('checkin')\r",
+									"const checkout = pm.collectionVariables.get('checkout')\r",
+									"const additionalneeds = pm.collectionVariables.get('additionalneeds')\r",
+									"\r",
+									"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+									"pm.test('Teste de contrato', function () {\r",
+									"\r",
+									"    // Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+									"    const jsonData = pm.response.json()\r",
+									"\r",
+									"    // Verificação dos campos presentes no JSON de resposta\r",
+									"    pm.expect(jsonData).to.have.property('firstname')\r",
+									"    pm.expect(jsonData).to.have.property('lastname')\r",
+									"    pm.expect(jsonData).to.have.property('totalprice')\r",
+									"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+									"    pm.expect(jsonData).to.have.property('bookingdates')\r",
+									"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+									"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+									"    pm.test(\"Verificar se 'additionalneeds' está presente e vazio\", function () {\r",
+									"        pm.test(\"Verifica valor de 'additionalneeds' (pode estar vazio ou preenchido)\", () => {\r",
+									"            if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+									"                if (jsonData.additionalneeds === \"\") {\r",
+									"                    console.log(\"Campo presente e vazio\")\r",
+									"                } else {\r",
+									"                    console.log(\"Campo presente e preenchido:\", jsonData.additionalneeds);\r",
+									"                }\r",
+									"            } else {\r",
+									"                console.warn(\"Campo 'additionalneeds' não está presente.\")\r",
+									"            }\r",
+									"        });\r",
+									"\r",
+									"    });\r",
+									"\r",
+									"    // Verificação do tipo dos campos\r",
+									"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+									"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+									"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+									"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+									"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+									"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+									"    if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+									"        pm.expect(jsonData.additionalneeds).to.be.a(\"string\")\r",
+									"    } else {\r",
+									"        console.warn(\"Campo 'additionalneeds' não está presente (o que é aceitável)\")\r",
+									"    }\r",
+									"\r",
+									"    // Verificar se os dados filtrados batem com o cadastro\r",
+									"    pm.expect(jsonData.firstname).to.eql(firstname)\r",
+									"    pm.expect(jsonData.lastname).to.eql(lastname)\r",
+									"    pm.expect(jsonData.totalprice).to.eql(totalprice)\r",
+									"    pm.expect(jsonData.depositpaid).to.eql(depositpaid)\r",
+									"    pm.expect(jsonData.bookingdates.checkin).to.eql(checkin)\r",
+									"    pm.expect(jsonData.bookingdates.checkout).to.eql(checkout)\r",
+									"    pm.expect(jsonData.additionalneeds).to.eql(additionalneeds)\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"{{id}}"
+							]
+						},
+						"description": "## Sucess 200\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| firstname | String | Firstname for the guest who made the booking |\n| lastname | String | Lastname for the guest who made the booking |\n| totalprice | Number | The total price for the booking |\n| depositpaid | Boolean | Whether the deposit has been paid or not |\n| bookingdates | Object | Sub-object that contains the checkin and checkout dates |\n| checkin | Date | Date the guest is checking in |\n| checkout | Date | Date the guest is checking out |\n| additionalneeds | String | Any other needs the guest has |"
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar ID de reservas por nome/sobrenome",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 200', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+									"pm.test('Teste de contrato', function () {\r",
+									"\r",
+									"    // Verificação dos campos\r",
+									"    pm.expect(jsonData[0]).to.have.property(\"bookingid\")\r",
+									"\r",
+									"    // Verificação do tipo dos campos\r",
+									"    pm.expect(jsonData[0].bookingid).to.be.a('number')\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/booking?firstname={{firstname}}&lastname={{lastname}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							],
+							"query": [
+								{
+									"key": "firstname",
+									"value": "{{firstname}}"
+								},
+								{
+									"key": "lastname",
+									"value": "{{lastname}}"
+								}
+							]
+						},
+						"description": "## Success 200\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| object | object\\[\\] | Array of objects that contain unique booking IDs |\n| bookingid | number | ID of a specific booking that matches search criteria |"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar reserva",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 200', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+									"pm.collectionVariables.set(\"firstnameAtualizado\", jsonData.firstname)\r",
+									"pm.collectionVariables.set(\"lastnameAtualizado\", jsonData.lastname)\r",
+									"pm.collectionVariables.set(\"totalpriceAtualizado\", jsonData.totalprice)\r",
+									"pm.collectionVariables.set(\"depositpaidAtualizado\", jsonData.depositpaid)\r",
+									"pm.collectionVariables.set(\"checkinAtualizado\", jsonData.bookingdates.checkin)\r",
+									"pm.collectionVariables.set(\"checkoutAtualizado\", jsonData.bookingdates.checkout)\r",
+									"pm.collectionVariables.set(\"additionalneedsAtualizado\", jsonData.additionalneeds)\r",
+									"\r",
+									"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+									"pm.test('Teste de contrato', function () {\r",
+									"\r",
+									"    // Verificação dos campos presentes no JSON de resposta\r",
+									"    pm.expect(jsonData).to.have.property('firstname')\r",
+									"    pm.expect(jsonData).to.have.property('lastname')\r",
+									"    pm.expect(jsonData).to.have.property('totalprice')\r",
+									"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+									"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+									"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+									"    pm.expect(jsonData).to.have.property('additionalneeds')\r",
+									"\r",
+									"    // Verificação do tipo dos campos\r",
+									"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+									"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+									"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+									"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+									"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "token={{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"Fernanda\",\r\n    \"lastname\": \"Flores\",\r\n    \"totalprice\": 888,\r\n    \"depositpaid\": false,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-11-06\",\r\n        \"checkout\": \"2025-11-08\"\r\n    },\r\n    \"additionalneeds\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"{{id}}"
+							]
+						},
+						"description": "## Request body\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| firstname | String | Firstname for the guest who made the booking |\n| lastname | String | Lastname for the guest who made the booking |\n| totalprice | Number | The total price for the booking |\n| depositpaid | Boolean | Whether the deposit has been paid or not |\n| checkin | Date | Date the guest is checking in |\n| checkout | Date | Date the guest is checking out |\n| additionalneeds | String | Any other needs the guest has |"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar parcialmente reserva",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 200', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+									"pm.collectionVariables.set(\"firstnameParcial\", jsonData.firstname)\r",
+									"pm.collectionVariables.set(\"lastnameParcial\", jsonData.lastname)\r",
+									"pm.collectionVariables.set(\"totalpriceParcial\", jsonData.totalprice)\r",
+									"pm.collectionVariables.set(\"depositpaidParcial\", jsonData.depositpaid)\r",
+									"pm.collectionVariables.set(\"checkinParcial\", jsonData.bookingdates.checkin)\r",
+									"pm.collectionVariables.set(\"checkoutParcial\", jsonData.bookingdates.checkout)\r",
+									"pm.collectionVariables.set(\"additionalneedsParcial\", jsonData.additionalneeds)\r",
+									"\r",
+									"pm.test('Teste de contrato', function () {\r",
+									"\r",
+									"    // Verificação dos campos presentes no JSON de resposta\r",
+									"    pm.expect(jsonData).to.have.property('firstname')\r",
+									"    pm.expect(jsonData).to.have.property('lastname')\r",
+									"    pm.expect(jsonData).to.have.property('totalprice')\r",
+									"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+									"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+									"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+									"    pm.expect(jsonData).to.have.property('additionalneeds')\r",
+									"\r",
+									"    // Verificação do tipo dos campos\r",
+									"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+									"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+									"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+									"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+									"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+									"    pm.expect(new Date(jsonData.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+									"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "token={{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\" : \"Ariel\",\r\n    \"lastname\" : \"Yellow\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"{{id}}"
+							]
+						},
+						"description": "## Request body\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| firstnameopcional | String | Firstname for the guest who made the booking |\n| lastnameopcional | String | Lastname for the guest who made the booking |\n| totalpriceopcional | Number | The total price for the booking |\n| depositpaidopcional | Boolean | Whether the deposit has been paid or not |\n| checkinopcional | Date | Date the guest is checking in |\n| checkoutopcional | Date | Date the guest is checking out |\n| additionalneedsopcional | String | Any other needs the guest has |"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar reserva",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+									"pm.test('Verificar código 201', () => {\r",
+									"    pm.response.to.have.status(201)\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "token={{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/booking/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"{{id}}"
+							]
+						},
+						"description": "## Success 200\n\n| Campo | Tipo | Descrição |\n| --- | --- | --- |\n| OK | String | Default HTTP 201 response |"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Testes automatizados",
+			"item": [
+				{
+					"name": "POST + GET - Validar criação de reserva",
+					"item": [
+						{
+							"name": "Criar reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"id\", jsonData.bookingid);\r",
+											"pm.collectionVariables.set(\"firstname\", jsonData.booking.firstname);\r",
+											"pm.collectionVariables.set(\"lastname\", jsonData.booking.lastname);\r",
+											"pm.collectionVariables.set(\"totalprice\", jsonData.booking.totalprice);\r",
+											"pm.collectionVariables.set(\"depositpaid\", jsonData.booking.depositpaid);\r",
+											"pm.collectionVariables.set(\"checkin\", jsonData.booking.bookingdates.checkin);\r",
+											"pm.collectionVariables.set(\"checkout\", jsonData.booking.bookingdates.checkout);\r",
+											"pm.collectionVariables.set(\"additionalneeds\", jsonData.booking.additionalneeds);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('bookingid');\r",
+											"    pm.expect(jsonData.booking).to.have.property('firstname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('lastname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData.booking).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkout')\r",
+											"    pm.expect(jsonData.booking).to.have.property('additionalneeds')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.bookingid).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.additionalneeds).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"David\",\r\n    \"lastname\": \"Medeiros\",\r\n    \"totalprice\": 999,\r\n    \"depositpaid\": true,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-06-12\",\r\n        \"checkout\": \"2025-06-15\"\r\n    },\r\n    \"additionalneeds\": \"Café da manhã\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consultar reserva por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Obtenção dos dados do cadastro a partir das variáveis de coleção. Esses dados são usados para comparação posterior.\r",
+											"const firstname = pm.collectionVariables.get('firstname')\r",
+											"const lastname = pm.collectionVariables.get('lastname')\r",
+											"const totalprice = pm.collectionVariables.get('totalprice')\r",
+											"const depositpaid = pm.collectionVariables.get('depositpaid')\r",
+											"const checkin = pm.collectionVariables.get('checkin')\r",
+											"const checkout = pm.collectionVariables.get('checkout')\r",
+											"const additionalneeds = pm.collectionVariables.get('additionalneeds')\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"    const jsonData = pm.response.json()\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('firstname')\r",
+											"    pm.expect(jsonData).to.have.property('lastname')\r",
+											"    pm.expect(jsonData).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData).to.have.property('bookingdates')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+											"    pm.test(\"Verificar se 'additionalneeds' está presente e vazio\", function () {\r",
+											"        pm.test(\"Verifica valor de 'additionalneeds' (pode estar vazio ou preenchido)\", () => {\r",
+											"            if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+											"                if (jsonData.additionalneeds === \"\") {\r",
+											"                    console.log(\"Campo presente e vazio\")\r",
+											"                } else {\r",
+											"                    console.log(\"Campo presente e preenchido:\", jsonData.additionalneeds);\r",
+											"                }\r",
+											"            } else {\r",
+											"                console.warn(\"Campo 'additionalneeds' não está presente.\")\r",
+											"            }\r",
+											"        });\r",
+											"\r",
+											"    });\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+											"    if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+											"        pm.expect(jsonData.additionalneeds).to.be.a(\"string\")\r",
+											"    } else {\r",
+											"        console.warn(\"Campo 'additionalneeds' não está presente (o que é aceitável)\")\r",
+											"    }\r",
+											"\r",
+											"    // Verificar se os dados filtrados batem com o cadastro\r",
+											"    pm.expect(jsonData.firstname).to.eql(firstname)\r",
+											"    pm.expect(jsonData.lastname).to.eql(lastname)\r",
+											"    pm.expect(jsonData.totalprice).to.eql(totalprice)\r",
+											"    pm.expect(jsonData.depositpaid).to.eql(depositpaid)\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.eql(checkin)\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.eql(checkout)\r",
+											"    pm.expect(jsonData.additionalneeds).to.eql(additionalneeds)\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST + PUT + GET - Validar atualização da reserva",
+					"item": [
+						{
+							"name": "Criar token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('token')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.token).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Criar reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"id\", jsonData.bookingid);\r",
+											"pm.collectionVariables.set(\"firstname\", jsonData.booking.firstname);\r",
+											"pm.collectionVariables.set(\"lastname\", jsonData.booking.lastname);\r",
+											"pm.collectionVariables.set(\"totalprice\", jsonData.booking.totalprice);\r",
+											"pm.collectionVariables.set(\"depositpaid\", jsonData.booking.depositpaid);\r",
+											"pm.collectionVariables.set(\"checkin\", jsonData.booking.bookingdates.checkin);\r",
+											"pm.collectionVariables.set(\"checkout\", jsonData.booking.bookingdates.checkout);\r",
+											"pm.collectionVariables.set(\"additionalneeds\", jsonData.booking.additionalneeds);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('bookingid');\r",
+											"    pm.expect(jsonData.booking).to.have.property('firstname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('lastname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData.booking).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkout')\r",
+											"    pm.expect(jsonData.booking).to.have.property('additionalneeds')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.bookingid).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.additionalneeds).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"David\",\r\n    \"lastname\": \"Medeiros\",\r\n    \"totalprice\": 999,\r\n    \"depositpaid\": true,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-06-12\",\r\n        \"checkout\": \"2025-06-15\"\r\n    },\r\n    \"additionalneeds\": \"Café da manhã\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"firstnameAtualizado\", jsonData.firstname)\r",
+											"pm.collectionVariables.set(\"lastnameAtualizado\", jsonData.lastname)\r",
+											"pm.collectionVariables.set(\"totalpriceAtualizado\", jsonData.totalprice)\r",
+											"pm.collectionVariables.set(\"depositpaidAtualizado\", jsonData.depositpaid)\r",
+											"pm.collectionVariables.set(\"checkinAtualizado\", jsonData.bookingdates.checkin)\r",
+											"pm.collectionVariables.set(\"checkoutAtualizado\", jsonData.bookingdates.checkout)\r",
+											"pm.collectionVariables.set(\"additionalneedsAtualizado\", jsonData.additionalneeds)\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('firstname')\r",
+											"    pm.expect(jsonData).to.have.property('lastname')\r",
+											"    pm.expect(jsonData).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+											"    pm.expect(jsonData).to.have.property('additionalneeds')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "token={{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"Fernanda\",\r\n    \"lastname\": \"Flores\",\r\n    \"totalprice\": 888,\r\n    \"depositpaid\": false,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-11-06\",\r\n        \"checkout\": \"2025-11-08\"\r\n    },\r\n    \"additionalneeds\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consultar atualização (PUT) da reserva por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Obtenção dos dados do cadastro a partir das variáveis de coleção. Esses dados são usados para comparação posterior.\r",
+											"const firstnameAtualizado = pm.collectionVariables.get('firstnameAtualizado')\r",
+											"const lastnameAtualizado = pm.collectionVariables.get('lastnameAtualizado')\r",
+											"const totalpriceAtualizado = pm.collectionVariables.get('totalpriceAtualizado')\r",
+											"const depositpaidAtualizado = pm.collectionVariables.get('depositpaidAtualizado')\r",
+											"const checkinAtualizado = pm.collectionVariables.get('checkinAtualizado')\r",
+											"const checkoutAtualizado = pm.collectionVariables.get('checkoutAtualizado')\r",
+											"const additionalneedsAtualizado = pm.collectionVariables.get('additionalneedsAtualizado')\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"    const jsonData = pm.response.json()\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('firstname')\r",
+											"    pm.expect(jsonData).to.have.property('lastname')\r",
+											"    pm.expect(jsonData).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData).to.have.property('bookingdates')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+											"    pm.test(\"Verificar se 'additionalneeds' está presente e vazio\", function () {\r",
+											"        pm.test(\"Verifica valor de 'additionalneeds' (pode estar vazio ou preenchido)\", () => {\r",
+											"            if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+											"                if (jsonData.additionalneeds === \"\") {\r",
+											"                    console.log(\"Campo presente e vazio\");\r",
+											"                } else {\r",
+											"                    console.log(\"Campo presente e preenchido:\", jsonData.additionalneeds)\r",
+											"                }\r",
+											"            } else {\r",
+											"                console.warn(\"Campo 'additionalneeds' não está presente.\")\r",
+											"            }\r",
+											"        });\r",
+											"\r",
+											"    });\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+											"    if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+											"        pm.expect(jsonData.additionalneeds).to.be.a(\"string\")\r",
+											"    } else {\r",
+											"        console.warn(\"Campo 'additionalneeds' não está presente (o que é aceitável)\")\r",
+											"    }\r",
+											"\r",
+											"    // Verificar se os dados filtrados batem com o cadastro\r",
+											"    pm.expect(jsonData.firstname).to.eql(firstnameAtualizado)\r",
+											"    pm.expect(jsonData.lastname).to.eql(lastnameAtualizado)\r",
+											"    pm.expect(jsonData.totalprice).to.eql(totalpriceAtualizado)\r",
+											"    pm.expect(jsonData.depositpaid).to.eql(depositpaidAtualizado)\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.eql(checkinAtualizado)\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.eql(checkoutAtualizado)\r",
+											"    pm.expect(jsonData.additionalneeds).to.eql(additionalneedsAtualizado)\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST + PATCH + GET - Consultar atualização parcial da reserva",
+					"item": [
+						{
+							"name": "Criar token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('token')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.token).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Criar reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"id\", jsonData.bookingid);\r",
+											"pm.collectionVariables.set(\"firstname\", jsonData.booking.firstname);\r",
+											"pm.collectionVariables.set(\"lastname\", jsonData.booking.lastname);\r",
+											"pm.collectionVariables.set(\"totalprice\", jsonData.booking.totalprice);\r",
+											"pm.collectionVariables.set(\"depositpaid\", jsonData.booking.depositpaid);\r",
+											"pm.collectionVariables.set(\"checkin\", jsonData.booking.bookingdates.checkin);\r",
+											"pm.collectionVariables.set(\"checkout\", jsonData.booking.bookingdates.checkout);\r",
+											"pm.collectionVariables.set(\"additionalneeds\", jsonData.booking.additionalneeds);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('bookingid');\r",
+											"    pm.expect(jsonData.booking).to.have.property('firstname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('lastname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData.booking).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkout')\r",
+											"    pm.expect(jsonData.booking).to.have.property('additionalneeds')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.bookingid).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.additionalneeds).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"David\",\r\n    \"lastname\": \"Medeiros\",\r\n    \"totalprice\": 999,\r\n    \"depositpaid\": true,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-06-12\",\r\n        \"checkout\": \"2025-06-15\"\r\n    },\r\n    \"additionalneeds\": \"Café da manhã\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar parcialmente reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"firstnameParcial\", jsonData.firstname)\r",
+											"pm.collectionVariables.set(\"lastnameParcial\", jsonData.lastname)\r",
+											"pm.collectionVariables.set(\"totalpriceParcial\", jsonData.totalprice)\r",
+											"pm.collectionVariables.set(\"depositpaidParcial\", jsonData.depositpaid)\r",
+											"pm.collectionVariables.set(\"checkinParcial\", jsonData.bookingdates.checkin)\r",
+											"pm.collectionVariables.set(\"checkoutParcial\", jsonData.bookingdates.checkout)\r",
+											"pm.collectionVariables.set(\"additionalneedsParcial\", jsonData.additionalneeds)\r",
+											"\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('firstname')\r",
+											"    pm.expect(jsonData).to.have.property('lastname')\r",
+											"    pm.expect(jsonData).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+											"    pm.expect(jsonData).to.have.property('additionalneeds')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "token={{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\" : \"Ariel\",\r\n    \"lastname\" : \"Yellow\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consultar atualização (PATCH) da reserva por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Obtenção dos dados do cadastro a partir das variáveis de coleção. Esses dados são usados para comparação posterior.\r",
+											"const firstnameParcial = pm.collectionVariables.get('firstnameParcial')\r",
+											"const lastnameParcial = pm.collectionVariables.get('lastnameParcial')\r",
+											"const totalpriceParcial = pm.collectionVariables.get('totalpriceParcial')\r",
+											"const depositpaidParcial = pm.collectionVariables.get('depositpaidParcial')\r",
+											"const checkinParcial = pm.collectionVariables.get('checkinParcial')\r",
+											"const checkoutParcial = pm.collectionVariables.get('checkoutParcial')\r",
+											"const additionalneedsParcial = pm.collectionVariables.get('additionalneedsParcial')\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"    const jsonData = pm.response.json()\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('firstname')\r",
+											"    pm.expect(jsonData).to.have.property('lastname')\r",
+											"    pm.expect(jsonData).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData).to.have.property('bookingdates')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.bookingdates).to.have.property('checkout')\r",
+											"    pm.test(\"Verificar se 'additionalneeds' está presente e vazio\", function () {\r",
+											"        pm.test(\"Verifica valor de 'additionalneeds' (pode estar vazio ou preenchido)\", () => {\r",
+											"            if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+											"                if (jsonData.additionalneeds === \"\") {\r",
+											"                    console.log(\"Campo presente e vazio\");\r",
+											"                } else {\r",
+											"                    console.log(\"Campo presente e preenchido:\", jsonData.additionalneeds)\r",
+											"                }\r",
+											"            } else {\r",
+											"                console.warn(\"Campo 'additionalneeds' não está presente.\")\r",
+											"            }\r",
+											"        });\r",
+											"\r",
+											"    });\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(jsonData.additionalneeds).to.be.a('string')\r",
+											"    if (jsonData.hasOwnProperty(\"additionalneeds\")) {\r",
+											"        pm.expect(jsonData.additionalneeds).to.be.a(\"string\")\r",
+											"    } else {\r",
+											"        console.warn(\"Campo 'additionalneeds' não está presente (o que é aceitável)\")\r",
+											"    }\r",
+											"\r",
+											"    // Verificar se os dados filtrados batem com o cadastro\r",
+											"    pm.expect(jsonData.firstname).to.eql(firstnameParcial)\r",
+											"    pm.expect(jsonData.lastname).to.eql(lastnameParcial)\r",
+											"    pm.expect(jsonData.totalprice).to.eql(totalpriceParcial)\r",
+											"    pm.expect(jsonData.depositpaid).to.eql(depositpaidParcial)\r",
+											"    pm.expect(jsonData.bookingdates.checkin).to.eql(checkinParcial)\r",
+											"    pm.expect(jsonData.bookingdates.checkout).to.eql(checkoutParcial)\r",
+											"    pm.expect(jsonData.additionalneeds).to.eql(additionalneedsParcial)\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST + DEL - Validar exclusão",
+					"item": [
+						{
+							"name": "Criar token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('token')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.token).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Criar reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 200', () => {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"\r",
+											"// Pega a resposta da requisição no Postman e transforma de JSON em objeto JavaScript\r",
+											"const jsonData = pm.response.json()\r",
+											"\r",
+											"// Armazenando os valores dos campos no pm.collectionVariables para uso em outros testes ou requests.\r",
+											"pm.collectionVariables.set(\"id\", jsonData.bookingid);\r",
+											"pm.collectionVariables.set(\"firstname\", jsonData.booking.firstname);\r",
+											"pm.collectionVariables.set(\"lastname\", jsonData.booking.lastname);\r",
+											"pm.collectionVariables.set(\"totalprice\", jsonData.booking.totalprice);\r",
+											"pm.collectionVariables.set(\"depositpaid\", jsonData.booking.depositpaid);\r",
+											"pm.collectionVariables.set(\"checkin\", jsonData.booking.bookingdates.checkin);\r",
+											"pm.collectionVariables.set(\"checkout\", jsonData.booking.bookingdates.checkout);\r",
+											"pm.collectionVariables.set(\"additionalneeds\", jsonData.booking.additionalneeds);\r",
+											"\r",
+											"// Teste de contrato para garantir que a resposta JSON contém os campos esperados e que os tipos de dados são corretos.\r",
+											"pm.test('Teste de contrato', function () {\r",
+											"\r",
+											"    // Verificação dos campos presentes no JSON de resposta\r",
+											"    pm.expect(jsonData).to.have.property('bookingid');\r",
+											"    pm.expect(jsonData.booking).to.have.property('firstname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('lastname')\r",
+											"    pm.expect(jsonData.booking).to.have.property('totalprice')\r",
+											"    pm.expect(jsonData.booking).to.have.property('depositpaid')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkin')\r",
+											"    pm.expect(jsonData.booking.bookingdates).to.have.property('checkout')\r",
+											"    pm.expect(jsonData.booking).to.have.property('additionalneeds')\r",
+											"\r",
+											"    // Verificação do tipo dos campos\r",
+											"    pm.expect(jsonData.bookingid).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.firstname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.lastname).to.be.a('string')\r",
+											"    pm.expect(jsonData.booking.totalprice).to.be.a('number')\r",
+											"    pm.expect(jsonData.booking.depositpaid).to.be.a('boolean')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkin).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkin).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.bookingdates.checkout).to.be.a('string')\r",
+											"    pm.expect(new Date(jsonData.booking.bookingdates.checkout).toString()).to.not.equal('Invalid Date')\r",
+											"    pm.expect(jsonData.booking.additionalneeds).to.be.a('string')\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"David\",\r\n    \"lastname\": \"Medeiros\",\r\n    \"totalprice\": 999,\r\n    \"depositpaid\": true,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2025-06-12\",\r\n        \"checkout\": \"2025-06-15\"\r\n    },\r\n    \"additionalneeds\": \"Café da manhã\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/booking",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletar reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validação do código de status da resposta. Espera-se que o código seja 200.\r",
+											"pm.test('Verificar código 201', () => {\r",
+											"    pm.response.to.have.status(201)\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "token={{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/booking/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"booking",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://restful-booker.herokuapp.com",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		},
+		{
+			"key": "firstname",
+			"value": ""
+		},
+		{
+			"key": "lastname",
+			"value": ""
+		},
+		{
+			"key": "totalprice",
+			"value": ""
+		},
+		{
+			"key": "depositpaid",
+			"value": ""
+		},
+		{
+			"key": "checkin",
+			"value": ""
+		},
+		{
+			"key": "checkout",
+			"value": ""
+		},
+		{
+			"key": "additionalneeds",
+			"value": ""
+		},
+		{
+			"key": "firstnameAtualizado",
+			"value": ""
+		},
+		{
+			"key": "lastnamAtualizado",
+			"value": ""
+		},
+		{
+			"key": "totalpriceAtualizado",
+			"value": ""
+		},
+		{
+			"key": "depositpaidAtualizado",
+			"value": ""
+		},
+		{
+			"key": "checkinAtualizado",
+			"value": ""
+		},
+		{
+			"key": "checkoutAtualizado",
+			"value": ""
+		},
+		{
+			"key": "additionalneedsAtualizado",
+			"value": ""
+		},
+		{
+			"key": "lastnameAtualizado",
+			"value": ""
+		},
+		{
+			"key": "firstnameParcial",
+			"value": ""
+		},
+		{
+			"key": "lastnameParcial",
+			"value": ""
+		},
+		{
+			"key": "totalpriceParcial",
+			"value": ""
+		},
+		{
+			"key": "depositpaidParcial",
+			"value": ""
+		},
+		{
+			"key": "checkinParcial",
+			"value": ""
+		},
+		{
+			"key": "checkoutParcial",
+			"value": ""
+		},
+		{
+			"key": "additionalneedsParcial",
+			"value": ""
+		}
+	]
+}
